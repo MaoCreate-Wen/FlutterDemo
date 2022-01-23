@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'package:wechat/UersSelf.dart';
+
 import 'UersChatWight.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 void main() {
   runApp(const chat());
@@ -11,13 +14,14 @@ class chat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var ChatUersName = ModalRoute.of(context)!.settings.arguments;
     return MaterialApp(
       color: Color.fromRGBO(214, 214, 214, 1),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: Text(
-            "冯总",
+            ChatUersName.toString(),
             style: TextStyle(color: Colors.black),
           ),
           toolbarHeight: 50,
@@ -53,7 +57,7 @@ class _MYHomeViewContentState extends State<MYHomeViewContent> {
     return SafeArea(
       child: Stack(
         children: [
-          _buildSuggestions(),
+          _buildChatContent(),
           _buildBomView(),
         ],
       ),
@@ -62,30 +66,44 @@ class _MYHomeViewContentState extends State<MYHomeViewContent> {
 
   ScrollController _scrollController = ScrollController();
   bool isFirst = true;
-
   ScrollController _controller = ScrollController();
 
-  _buildSuggestions() {
+  _buildChatContent() {
     Timer(Duration(milliseconds: 500),
         () => _controller.jumpTo(_controller.position.maxScrollExtent));
-
+    print("build");
     return Container(
       margin: EdgeInsets.only(bottom: 60),
       child: ListView.builder(
           controller: _controller,
           padding: const EdgeInsets.only(left: 9, right: 9, bottom: 9),
           itemBuilder: (context, i) {
-            return Column(
-              children: getUersChatList(),
-            );
+            if (isFirst == true) {
+              getUersChatList();
+              isFirst = false;
+              print(isFirst);
+            } else {
+              uersList.add(UersChatWidght_UersSelf(
+                  sendMassge.toString(), "assetImage/Mao-CreateIcon.jpg"));
+            }
+
+            return Stack(children: [
+              Column(
+                children: uersList,
+              )
+            ]);
           },
           itemCount: 1),
     );
   }
 
   TextEditingController userController = TextEditingController();
-  String UersInput = "";
+  String? UersInput;
+  String? sendMassge;
   List<Widget> uersList = [];
+  List<Widget> lastUersList = [];
+  var socket;
+  String? TextContent;
   List<Widget> getUersChatList() {
     for (var i = 0; i < 20; i++) {
       uersList
@@ -95,8 +113,15 @@ class _MYHomeViewContentState extends State<MYHomeViewContent> {
     return uersList;
   }
 
+  Future<void> NewSocket() async {
+    await Socket.connect("192.168.101.84", 80).then((value) {
+      this.socket = value;
+    });
+  }
+
   ///底部视图
   Widget _buildBomView() {
+    this.NewSocket();
     return Positioned(
       left: 0,
       right: 0,
@@ -121,7 +146,7 @@ class _MYHomeViewContentState extends State<MYHomeViewContent> {
                   cursorColor: Color(0xFF464EB5),
                   maxLines: null,
                   decoration: InputDecoration(
-                    counterText: '',
+                    counterText: TextContent,
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.only(
                         left: 16.0, right: 16.0, top: 10.0, bottom: 10.0),
@@ -130,11 +155,11 @@ class _MYHomeViewContentState extends State<MYHomeViewContent> {
                         TextStyle(color: Color(0xFFADB3BA), fontSize: 15),
                   ),
                   style: TextStyle(color: Color(0xFF03073C), fontSize: 15),
-                  onChanged: (value) {
-                    setState(() {
-                      this.UersInput = value;
-                    });
-                  },
+                  // onChanged: (value) {
+                  //   setState(() {
+                  //     this.UersInput = value;
+                  //   });
+                  // },
                 ),
               ),
             ),
@@ -153,8 +178,14 @@ class _MYHomeViewContentState extends State<MYHomeViewContent> {
                 ),
               ),
               onTap: () {
-                print(this.UersInput);
                 _controller.jumpTo(_controller.position.maxScrollExtent);
+                setState(() {
+                  this.sendMassge = this.userController.text;
+                  _buildChatContent();
+                  this.userController.text = "";
+                });
+                print(this.sendMassge);
+                this.socket.write(sendMassge);
               },
             ),
           ],

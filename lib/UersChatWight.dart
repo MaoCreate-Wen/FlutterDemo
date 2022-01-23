@@ -88,16 +88,20 @@ Widget UersChatWidght_UersSelf(String Textcontent, String ImageAd) {
   return Container(
     width: double.infinity,
     child: Row(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Stack(
           children: [
             Positioned(
                 // left: 50,
                 child: Container(
-              margin: EdgeInsets.only(left: 210, top: 10),
+              margin: EdgeInsets.only(
+                left: 110,
+                top: 10,
+              ),
               constraints: BoxConstraints(
                 minHeight: 50,
-                maxWidth: 500,
+                maxWidth: 200,
               ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(7)),

@@ -4,9 +4,17 @@ import 'wechat.dart';
 import 'friends.dart';
 import 'cloud.dart';
 import 'chat.dart';
+import 'dart:io';
 
-void main(List<String> args) {
+void main() async {
   runApp(Mainpage());
+  // Socket.connect("192.168.101.84", 80).then((socket) {
+  //   print('Connected to: '
+  //       '${socket.remoteAddress.address}:${socket.remotePort}');
+  //   // socket.destroy();
+  //   socket.write("1111");
+  //   socket.destroy();
+  // });
 }
 
 class Mainpage extends StatelessWidget {

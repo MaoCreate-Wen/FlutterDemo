@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'main.dart';
+import 'UersData/UersList.dart';
 import 'package:flutter/material.dart';
 import 'package:wechat/chat.dart';
 import 'package:wechat/UersData/UersList.dart';
@@ -80,62 +80,63 @@ class WechatList extends StatefulWidget {
 }
 
 class _WechatListState extends State<WechatList> {
-  List<Widget> _GetUersList() {
-    List<Widget> UersList = [];
-    for (var i = 0; i < 20; ++i) {
-      UersList.add(Column(
-        children: [
-          ListTile(
-            leading: Container(
-              height: 45,
-              width: 50,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assetImage/Mao-CreateIcon.jpg"),
-                      fit: BoxFit.fill),
-                  color: Colors.yellow,
-                  borderRadius: BorderRadius.all(Radius.circular(5.0))),
-            ),
-            title: Text("袤创科技"),
-            subtitle: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    "冯总：出来吹水",
-                    textAlign: TextAlign.left,
-                  ),
-                  flex: 1,
-                ),
-                Expanded(
-                    child: Text(
-                  "2022-11-11",
-                  textAlign: TextAlign.right,
-                ))
-              ],
-            ),
-            trailing: Icon(Icons.mail_outline),
-            onLongPress: () {},
-            onTap: () {
-              Navigator.of(
-                context,
-                rootNavigator: true,
-              ).pushNamed("/chat");
-              // ReSetPage(2);
-            },
-          ),
-          Divider(
-            height: 3,
-          )
-        ],
-      ));
-    }
-    return UersList;
+  @override
+  int massgeLength = data.massge.length;
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: massgeLength,
+      itemBuilder: (context, index) {
+        return Getmassge(index);
+      },
+    );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: this._GetUersList(),
+  DateTime dateTime = DateTime.now();
+  Widget Getmassge(int index) {
+    return Column(
+      children: [
+        ListTile(
+          leading: Container(
+            height: 45,
+            width: 50,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(data.massge[index]["Icon"]),
+                    fit: BoxFit.fill),
+                color: Colors.yellow,
+                borderRadius: BorderRadius.all(Radius.circular(5.0))),
+          ),
+          title: Text(data.massge[index]["name"]),
+          subtitle: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  data.massge[index]["LastMassge"],
+                  textAlign: TextAlign.left,
+                ),
+                flex: 1,
+              ),
+              Expanded(
+                  child: Text(
+                dateTime.toString().substring(0, 19),
+                textAlign: TextAlign.right,
+              ))
+            ],
+          ),
+          trailing: Icon(Icons.mail_outline),
+          onLongPress: () {},
+          onTap: () {
+            Navigator.of(
+              context,
+              rootNavigator: true,
+            ).pushNamed("/chat", arguments: data.massge[index]["name"]);
+            // ReSetPage(2);
+          },
+        ),
+        Divider(
+          height: 3,
+        )
+      ],
     );
   }
 }
