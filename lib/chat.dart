@@ -1,12 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:wechat/Server/cli.dart';
 import 'package:wechat/UersSelf.dart';
 
 import 'UersChatWight.dart';
+import 'Server/cli.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 
 void main() {
-  runApp(const chat());
+  runApp(chat());
 }
 
 class chat extends StatelessWidget {
@@ -15,31 +18,27 @@ class chat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var ChatUersName = ModalRoute.of(context)!.settings.arguments;
-    return MaterialApp(
-      color: Color.fromRGBO(214, 214, 214, 1),
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            ChatUersName.toString(),
-            style: TextStyle(color: Colors.black),
-          ),
-          toolbarHeight: 50,
-          leading: IconButton(
-            icon: Icon(
-              Icons.chevron_left,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
-          shadowColor: Colors.transparent,
-          centerTitle: true,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          ChatUersName.toString(),
+          style: TextStyle(color: Colors.black),
         ),
-        body: const MYHomeViewContent(),
+        toolbarHeight: 50,
+        leading: IconButton(
+          icon: Icon(
+            Icons.chevron_left,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
+        shadowColor: Colors.transparent,
+        centerTitle: true,
       ),
+      body: const MYHomeViewContent(),
     );
   }
 }
@@ -105,11 +104,11 @@ class _MYHomeViewContentState extends State<MYHomeViewContent> {
   var socket;
   String? TextContent;
   List<Widget> getUersChatList() {
-    for (var i = 0; i < 20; i++) {
-      uersList
-          .add(UersChatWidght_UersSelf("好的", "assetImage/Mao-CreateIcon.jpg"));
-      uersList.add(UersChatWidght("出来吹水", "assetImage/Mao-CreateIcon.jpg"));
-    }
+    // for (var i = 0; i < 20; i++) {
+    //   uersList
+    //       .add(UersChatWidght_UersSelf("好的", "assetImage/Mao-CreateIcon.jpg"));
+    //   uersList.add(UersChatWidght("出来吹水", "assetImage/Mao-CreateIcon.jpg"));
+    // }
     return uersList;
   }
 
@@ -185,7 +184,8 @@ class _MYHomeViewContentState extends State<MYHomeViewContent> {
                   this.userController.text = "";
                 });
                 print(this.sendMassge);
-                this.socket.write(sendMassge);
+                // SocketMassge.sendmsg(
+                //     '{"msg_type":"content","msg_content":"{${this.sendMassge}}"}');
               },
             ),
           ],

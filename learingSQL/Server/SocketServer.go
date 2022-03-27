@@ -76,9 +76,9 @@ func (this *Server) handle(Conn net.Conn) {
 				if PassWordCheck == false {
 					println("PassWord error")
 					println(send)
-					SendMassge("0", Conn)
+					SendMassge("login error", Conn)
 				} else {
-					SendMassge("1", Conn)
+					SendMassge("login succes", Conn)
 					println("login sec")
 					user := NewUsers(msg.Username, UserListen)
 					onlineMap[user.Username] = user
@@ -97,7 +97,6 @@ func (this *Server) handle(Conn net.Conn) {
 					NewUser := &Users{
 						Username: msg.Username,
 						PassWord: msg.PassWord,
-						LastWord: "",
 						Icon:     "",
 					}
 

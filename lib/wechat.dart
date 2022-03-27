@@ -1,5 +1,7 @@
 import 'dart:convert';
-import 'main.dart';
+import 'package:wechat/Server/cli.dart';
+import 'chat.dart';
+// import 'mainpage.dart';
 import 'UersData/UersList.dart';
 import 'package:flutter/material.dart';
 import 'package:wechat/chat.dart';
@@ -19,13 +21,7 @@ class Wechat extends StatefulWidget {
 class _WechatState extends State<Wechat> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Title(),
-      routes: {
-        "/chat": (context) => chat(),
-      },
-    );
+    return Title();
   }
 }
 
@@ -51,7 +47,9 @@ class _TitleState extends State<Title> {
               Icons.search,
               color: Colors.black,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed("/search");
+            },
           ),
           IconButton(
             icon: Icon(
@@ -101,17 +99,17 @@ class _WechatListState extends State<WechatList> {
             width: 50,
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage(data.massge[index]["Icon"]),
+                    image: AssetImage(data.massge[index]["Icon"] ?? ""),
                     fit: BoxFit.fill),
                 color: Colors.yellow,
                 borderRadius: BorderRadius.all(Radius.circular(5.0))),
           ),
-          title: Text(data.massge[index]["name"]),
+          title: Text(data.massge[index]["name"] ?? ""),
           subtitle: Row(
             children: [
               Expanded(
                 child: Text(
-                  data.massge[index]["LastMassge"],
+                  data.massge[index]["LastMassge"] ?? "",
                   textAlign: TextAlign.left,
                 ),
                 flex: 1,
@@ -129,7 +127,7 @@ class _WechatListState extends State<WechatList> {
             Navigator.of(
               context,
               rootNavigator: true,
-            ).pushNamed("/chat", arguments: data.massge[index]["name"]);
+            ).pushNamed("/chat", arguments: data.massge[index]["name"] ?? "");
             // ReSetPage(2);
           },
         ),

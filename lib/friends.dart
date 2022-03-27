@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wechat/main.dart';
+// import 'package:wechat/mainpage.dart';
 
 void main(List<String> args) {
   runApp(FriendPgae());
@@ -45,38 +45,35 @@ class _FriendPgaeState extends State<FriendPgae> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          toolbarHeight: 40,
-          backgroundColor: Color.fromRGBO(224, 224, 224, 0.5),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.search,
-                color: Colors.black,
-              ),
-              onPressed: () {},
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        toolbarHeight: 40,
+        backgroundColor: Color.fromRGBO(224, 224, 224, 0.5),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.search,
+              color: Colors.black,
             ),
-            IconButton(
-              icon: Icon(
-                Icons.add,
-                color: Colors.black,
-              ),
-              onPressed: () {},
-            ),
-          ],
-          centerTitle: true,
-          title: Text(
-            "friends",
-            style: TextStyle(color: Colors.black),
+            onPressed: () {},
           ),
+          IconButton(
+            icon: Icon(
+              Icons.add,
+              color: Colors.black,
+            ),
+            onPressed: () {},
+          ),
+        ],
+        centerTitle: true,
+        title: Text(
+          "friends",
+          style: TextStyle(color: Colors.black),
         ),
-        body: ListView(
-          children: this._GetUersList(),
-        ),
+      ),
+      body: ListView(
+        children: this._GetUersList(),
       ),
     );
   }

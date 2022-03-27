@@ -13,7 +13,6 @@ type Users struct {
 	Username string `db:"usersname"`
 	PassWord string `db:"PassWord"`
 	Icon     string `db:"Icon"`
-	LastWord string `db:"LastWord"`
 }
 
 func init() {
@@ -26,7 +25,7 @@ func init() {
 }
 func CheckUsersPassword(UserName string, Password string) bool {
 	var users []Users
-	sql := "select usersname,PassWord, Icon,LastWord from usersdata where UsersName = ? and PassWord = ?"
+	sql := "select usersname,PassWord, Icon from usersdata where UsersName = ? and PassWord = ?"
 	err := db.Select(&users, sql, UserName, Password)
 	if err != nil {
 		fmt.Println("exec failed, ", err)
@@ -43,7 +42,7 @@ func CheckUsersPassword(UserName string, Password string) bool {
 }
 func CheckUsers(UserName string) bool {
 	var users []Users
-	sql := "select usersname,PassWord, Icon,LastWord from usersdata where UsersName = ?"
+	sql := "select usersname,PassWord, Icon from usersdata where UsersName = ?"
 	err := db.Select(&users, sql, UserName)
 	if err != nil {
 		fmt.Println("exec failed, ", err)
@@ -60,7 +59,7 @@ func CheckUsers(UserName string) bool {
 }
 func SearchUsers(UserName string) []string {
 	var users []string
-	sql := "select usersname,PassWord, Icon,LastWord from usersdata where UsersName = ?"
+	sql := "select usersname,PassWord, Icon from usersdata where UsersName = ?"
 	err := db.Select(&users, sql, UserName)
 	if err != nil {
 		fmt.Println("exec failed, ", err)
@@ -72,8 +71,8 @@ func SearchUsers(UserName string) []string {
 	return users
 }
 func AddNewUsers(Users *Users) {
-	sql := "insert into usersdata(usersname,PassWord, Icon,LastWord)values (?,?,?,?)"
-	value := [5]string{Users.Username, Users.PassWord, Users.Icon, Users.LastWord}
+	sql := "insert into usersdata(usersname,PassWord, Icon)values (?,?,?)"
+	value := [5]string{Users.Username, Users.PassWord, Users.Icon}
 
 	//执行SQL语句
 	r, err := db.Exec(sql, value[0], value[1], value[2], value[3])
